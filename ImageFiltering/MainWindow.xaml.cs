@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -317,7 +318,7 @@ namespace ImageFiltering
                 { 0, -1, 0 }
                     };
                     break;
-                case "Edge Detection":
+                case "Edge Detect":
                     kernel = new double[,]
                     {
                 { -1, -1, -1 },
