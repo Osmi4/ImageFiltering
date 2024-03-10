@@ -34,5 +34,7 @@
             <MenuItem Click="SaveImageButton_Click" Header="Save File" />
             <MenuItem Click="ResetFiltersButton_Click" Header="Reset Filters" />
         </Menu>
+        <Button x:Name="HSVButton" Content="HSV" HorizontalAlignment="Left" Margin="460,493,0,0" VerticalAlignment="Top" Click="HSVButton_Click"/>
+        <Button x:Name="RGBButton" Content="RGB" HorizontalAlignment="Left" Margin="535,493,0,0" VerticalAlignment="Top" Click="RGBButton_Click"/>
     </Grid>
 </Window>
