@@ -5,36 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageFiltering"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1000" ResizeMode="NoResize">
+        Title="MainWindow" Height="700" Width="1000">
     <Grid Height="700" Width="1000" Margin="0,0,0,-16">
-        <Button x:Name="InvertButton" Content="Invert" HorizontalAlignment="Left" Margin="100,598,0,0" VerticalAlignment="Top" Click="InvertButton_Click" RenderTransformOrigin="0.5,0.5" Width="50" Height="20">
-            <Button.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-1.33"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Button.RenderTransform>
-        </Button>
-        <Button x:Name="BrightenButton" Content="Brighten" HorizontalAlignment="Left" Margin="100,493,0,0" VerticalAlignment="Top" Click="BrightenButton_Click" Width="50" Height="20"/>
-        <Button x:Name="GammaButton" Content="Gamma" HorizontalAlignment="Left" Margin="100,528,0,0" VerticalAlignment="Top" Click="GammaButton_Click" Width="50" Height="20"/>
-        <Button x:Name="ContrastButton" Content="Contrast" HorizontalAlignment="Left" Margin="100,563,0,0" VerticalAlignment="Top" Click="ContrastButton_Click" Width="50" Height="20"/>
-        <Image x:Name="OriginalImageViewer" HorizontalAlignment="Left" Height="300" Margin="125,79,0,0" VerticalAlignment="Top" Width="300"/>
-        <Image x:Name="ModifiedImageViewer" HorizontalAlignment="Left" Height="300" Margin="571,79,0,0" VerticalAlignment="Top" Width="300"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Button x:Name="InvertButton" Content="Invert" HorizontalAlignment="Left" Margin="65,590,0,0" VerticalAlignment="Top" Click="InvertButton_Click"  Width="105" Height="20" />
+        <Button x:Name="BrightenButton" Content="Brighten" HorizontalAlignment="Left" Margin="65,493,0,0" VerticalAlignment="Top" Click="BrightenButton_Click" Width="105" Height="20"/>
+        <Button x:Name="GammaButton" Content="Gamma" HorizontalAlignment="Left" Margin="65,526,0,0" VerticalAlignment="Top" Click="GammaButton_Click" Width="105" Height="20"/>
+        <Button x:Name="ContrastButton" Content="Contrast" HorizontalAlignment="Left" Margin="65,558,0,0" VerticalAlignment="Top" Click="ContrastButton_Click" Width="105" Height="20"/>
+        <Image x:Name="OriginalImageViewer" HorizontalAlignment="Left" Height="370" Margin="65,79,0,0" VerticalAlignment="Top" Width="400"/>
+        <Image x:Name="ModifiedImageViewer" HorizontalAlignment="Left" Height="370" Margin="548,79,0,0" VerticalAlignment="Top" Width="400"/>
         <Label Content="Current Image:" HorizontalAlignment="Left" Margin="535,27,0,0" VerticalAlignment="Top"/>
         <Label x:Name="ImageNameLabel" Content="" HorizontalAlignment="Left" Margin="654,27,0,0" VerticalAlignment="Top" Width="280"/>
-        <Button x:Name="BlurButton" Content="Blur" HorizontalAlignment="Left" Margin="209,493,0,0" VerticalAlignment="Top" Click="ApplyFilterButton_Click" Width="50" Height="20"/>
-        <Button x:Name="GaussianBlurButton" Content="Gaussian Blur" HorizontalAlignment="Left" Margin="209,528,0,0" VerticalAlignment="Top" Click="ApplyFilterButton_Click" Width="50" Height="20"/>
-        <Button x:Name="SharpenButton" Content="Sharpen" HorizontalAlignment="Left" Margin="209,563,0,0" VerticalAlignment="Top" Click="ApplyFilterButton_Click" Width="50" Height="20"/>
-        <Button x:Name="EdgeDetetectionButton" Content="Edge Detect" HorizontalAlignment="Left" Margin="209,600,0,0" VerticalAlignment="Top" Click="ApplyFilterButton_Click" Width="72" Height="20"/>
-        <Button x:Name="EmbossButon" Content="Emboss" HorizontalAlignment="Left" Margin="302,493,0,0" VerticalAlignment="Top" Click="ApplyFilterButton_Click" Width="50" Height="20"/>
-        <Menu Margin="0,0,0,678">
+        <Button x:Name="BlurButton" Content="Blur" HorizontalAlignment="Left" Margin="193,493,0,0" VerticalAlignment="Top" Click="ApplyFilterButton_Click" Width="105" Height="20"/>
+        <Button x:Name="GaussianBlurButton" Content="Gaussian Blur" HorizontalAlignment="Left" Margin="193,526,0,0" VerticalAlignment="Top" Click="ApplyFilterButton_Click" Width="105" Height="20"/>
+        <Button x:Name="SharpenButton" Content="Sharpen" HorizontalAlignment="Left" Margin="193,558,0,0" VerticalAlignment="Top" Click="ApplyFilterButton_Click" Width="105" Height="20"/>
+        <Button x:Name="EdgeDetetectionButton" Content="Edge Detect" HorizontalAlignment="Left" Margin="193,590,0,0" VerticalAlignment="Top" Click="ApplyFilterButton_Click" Width="105" Height="20"/>
+        <Button x:Name="EmbossButon" Content="Emboss" HorizontalAlignment="Left" Margin="323,493,0,0" VerticalAlignment="Top" Click="ApplyFilterButton_Click" Width="105" Height="20"/>
+        <Menu Margin="0,0,0,678" HorizontalAlignment="Right" Width="1000" Grid.Row="0">
             <MenuItem Click="BrowseButton_Click" Header="Browse..." />
             <MenuItem Click="SaveImageButton_Click" Header="Save File" />
             <MenuItem Click="ResetFiltersButton_Click" Header="Reset Filters" />
         </Menu>
-        <Button x:Name="HSVButton" Content="HSV" HorizontalAlignment="Left" Margin="460,493,0,0" VerticalAlignment="Top" Click="HSVButton_Click"/>
-        <Button x:Name="RGBButton" Content="RGB" HorizontalAlignment="Left" Margin="535,493,0,0" VerticalAlignment="Top" Click="RGBButton_Click"/>
+        <Button x:Name="HSVButton" Content="HSV" HorizontalAlignment="Left" Margin="460,493,0,0" VerticalAlignment="Top" Click="HSVButton_Click" Width="105"/>
+        <Button x:Name="RGBButton" Content="RGB" HorizontalAlignment="Left" Margin="460,528,0,0" VerticalAlignment="Top" Click="RGBButton_Click" Width="105"/>
+        <Button x:Name="GrayscaleButton" Content="Grayscale" HorizontalAlignment="Left" Margin="323,526,0,0" VerticalAlignment="Top" Click="GrayscaleButton_Click" Width="105" Height="20"/>
+        <Button x:Name="RandomDitheringButton" Content="Random Dithering" HorizontalAlignment="Left" Margin="323,558,0,0" VerticalAlignment="Top" Width="105" Click="RandomDitheringButton_Click"/>
+        <Button x:Name="MedianCutButton" Content="Median Cut" HorizontalAlignment="Left" Margin="602,528,0,0" VerticalAlignment="Top" Width="105" Click="MedianCutButton_Click"/>
+        <Slider x:Name="MedianCutSlider" HorizontalAlignment="Left" Margin="590,495,0,0" VerticalAlignment="Top" Width="128" AutoToolTipPlacement="TopLeft" Maximum="255" Minimum="8"/>
     </Grid>
 </Window>

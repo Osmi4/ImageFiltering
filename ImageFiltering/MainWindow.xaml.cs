@@ -19,6 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MedianCut;
 
 namespace ImageFiltering
 {
@@ -42,11 +43,14 @@ namespace ImageFiltering
             if (dlg.ShowDialog() ?? false)
             {
                 string selectedFileName = dlg.FileName;
-                ImageNameLabel.Content = selectedFileName;
+                ImageNameLabel.Content = System.IO.Path.GetFileName(selectedFileName);
+
                 BitmapImage bitmap = new BitmapImage();
                 bitmap.BeginInit();
                 bitmap.UriSource = new Uri(selectedFileName);
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
                 bitmap.EndInit();
+
                 OriginalImageViewer.Source = bitmap;
                 ModifiedImageViewer.Source = bitmap;
             }
@@ -475,5 +479,123 @@ namespace ImageFiltering
             BitmapSource rgbBitmap = BitmapSource.Create(width, height, 96, 96, PixelFormats.Bgr32, null, pixels, width * 4);
             return rgbBitmap;
         }
+
+        private void GrayscaleButton_Click(object sender, RoutedEventArgs e)
+        {
+            BitmapSource bitmapSource = OriginalImageViewer.Source as BitmapSource;
+
+            if (bitmapSource != null)
+            {
+                FormatConvertedBitmap grayscaleBitmap = (FormatConvertedBitmap)ConvertToGrayscale(bitmapSource);
+
+                ModifiedImageViewer.Source = grayscaleBitmap;
+            }
+        }
+
+        private void RandomDitheringButton_Click(object sender, RoutedEventArgs e)
+        {
+            BitmapSource bitmapSource = OriginalImageViewer.Source as BitmapSource;
+
+            if (bitmapSource != null)
+            {
+                BitmapSource ditheredBitmap = ApplyRandomDithering(bitmapSource);
+
+                ModifiedImageViewer.Source = ditheredBitmap;
+            }
+
+        }
+
+        private BitmapSource ApplyRandomDithering(BitmapSource sourceBitmap)
+        {
+            int width = sourceBitmap.PixelWidth;
+            int height = sourceBitmap.PixelHeight;
+
+            byte[] pixelValues = new byte[width * height * 4];
+
+            sourceBitmap.CopyPixels(pixelValues, width * 4, 0);
+
+            Random random = new Random();
+
+            bool isGrayscale = IsGrayscale(sourceBitmap);
+
+            for (int i = 0; i < pixelValues.Length; i += 4)
+            {
+                byte r = pixelValues[i];  
+                byte g = pixelValues[i + 1]; 
+                byte b = pixelValues[i + 2];
+
+                byte grayscaleValue;
+
+                if (isGrayscale)
+                {
+                    grayscaleValue = r;
+                }
+                else
+                {
+                    grayscaleValue = (byte)((0.299 * r) + (0.587 * g) + (0.114 * b));
+                }
+
+                byte threshold = (byte)random.Next(256);
+
+                byte ditheredValue = (grayscaleValue > threshold) ? (byte)255 : (byte)0;
+
+                if (isGrayscale)
+                {
+                    pixelValues[i] = ditheredValue;
+                    pixelValues[i + 1] = ditheredValue;
+                    pixelValues[i + 2] = ditheredValue;
+                    pixelValues[i + 3] = ditheredValue;
+                }
+                else
+                {
+                    pixelValues[i] = ditheredValue;   
+                    pixelValues[i + 1] = ditheredValue;
+                    pixelValues[i + 2] = ditheredValue; 
+                }
+            }
+
+            WriteableBitmap ditheredBitmap = new WriteableBitmap(width, height, sourceBitmap.DpiX, sourceBitmap.DpiY, sourceBitmap.Format, sourceBitmap.Palette);
+            ditheredBitmap.WritePixels(new Int32Rect(0, 0, width, height), pixelValues, width * 4, 0);
+
+            return ditheredBitmap;
+        }
+
+        private bool IsGrayscale(BitmapSource bitmap)
+        {
+            bool isGrayscale = bitmap.Format == PixelFormats.Gray8 || bitmap.Format == PixelFormats.Gray16;
+            return isGrayscale;
+        }
+
+        private BitmapSource ConvertToGrayscale(BitmapSource originalBitmap)
+        {
+            FormatConvertedBitmap grayscaleBitmap = new FormatConvertedBitmap(originalBitmap, PixelFormats.Gray8, null, 0);
+
+            return grayscaleBitmap;
+        }
+
+        private void MedianCutButton_Click(object sender, RoutedEventArgs e)
+        {
+            BitmapSource originalBitmapSource = OriginalImageViewer.Source as BitmapSource;
+
+            if (originalBitmapSource != null)
+            {
+                BitmapSource modifiedBitmapSource = ApplyMedianCut(originalBitmapSource);
+
+                ModifiedImageViewer.Source = modifiedBitmapSource;
+            }
+        }
+
+        private BitmapSource ApplyMedianCut(BitmapSource bitmapSource)
+        {
+            int nbColors = (int)MedianCutSlider.Value;
+
+            mc medianCut = new mc(bitmapSource,nbColors);
+
+            medianCut.create_main_list();
+
+            BitmapSource modifiedBitmapSource = medianCut.median_cut();
+
+            return modifiedBitmapSource;
+        }
     }
-    }
+}
