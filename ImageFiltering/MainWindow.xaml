@@ -36,5 +36,7 @@
         <Button x:Name="RandomDitheringButton" Content="Random Dithering" HorizontalAlignment="Left" Margin="323,558,0,0" VerticalAlignment="Top" Width="105" Click="RandomDitheringButton_Click"/>
         <Button x:Name="MedianCutButton" Content="Median Cut" HorizontalAlignment="Left" Margin="602,528,0,0" VerticalAlignment="Top" Width="105" Click="MedianCutButton_Click"/>
         <Slider x:Name="MedianCutSlider" HorizontalAlignment="Left" Margin="590,495,0,0" VerticalAlignment="Top" Width="128" AutoToolTipPlacement="TopLeft" Maximum="255" Minimum="8"/>
+        <Button x:Name="PixelizeButton" Content="Pixelize" HorizontalAlignment="Left" Margin="742,528,0,0" VerticalAlignment="Top" Width="104" Click="PixelizeButton_Click"/>
+        <Slider x:Name="PixelizeSlider" HorizontalAlignment="Left" Margin="730,495,0,0" VerticalAlignment="Top" Width="128" AutoToolTipPlacement="TopLeft" Maximum="100" Minimum="1"/>
     </Grid>
 </Window>

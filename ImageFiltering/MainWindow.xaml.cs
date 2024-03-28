@@ -230,7 +230,7 @@ namespace ImageFiltering
                 MessageBox.Show("No image to save.");
             }
         }
-
+            
         private void ApplyFilterButton_Click(object sender, RoutedEventArgs e)
         {   
             Button button = sender as Button;
@@ -596,6 +596,71 @@ namespace ImageFiltering
             BitmapSource modifiedBitmapSource = medianCut.median_cut();
 
             return modifiedBitmapSource;
+        }
+
+        private void PixelizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            BitmapSource originalBitmapSource = OriginalImageViewer.Source as BitmapSource;
+
+            int pixelsPerColor = (int)PixelizeSlider.Value;
+            if (originalBitmapSource != null)
+            {
+                ImageSource modifiedBitmapSource = PixelizeImage(originalBitmapSource,pixelsPerColor );
+
+                ModifiedImageViewer.Source = modifiedBitmapSource;
+            }
+        }
+
+        private ImageSource PixelizeImage(BitmapSource originalBitmap, int pixelSize)
+        {
+            int stride = originalBitmap.PixelWidth * (originalBitmap.Format.BitsPerPixel / 8);
+            byte[] pixels = new byte[originalBitmap.PixelHeight * stride];
+            originalBitmap.CopyPixels(pixels, stride, 0);
+
+            int width = originalBitmap.PixelWidth;
+            int height = originalBitmap.PixelHeight;
+
+            WriteableBitmap writableBitmap = new WriteableBitmap(originalBitmap);
+
+            for (int y = 0; y < height; y += pixelSize)
+            {
+                for (int x = 0; x < width; x += pixelSize)
+                {
+                    int totalR = 0, totalG = 0, totalB = 0;
+
+                    for (int offsetY = 0; offsetY < pixelSize && y + offsetY < height; offsetY++)
+                    {
+                        for (int offsetX = 0; offsetX < pixelSize && x + offsetX < width; offsetX++)
+                        {
+                            int pixelIndex = (y + offsetY) * stride + (x + offsetX) * 4;
+                            totalB += pixels[pixelIndex];
+                            totalG += pixels[pixelIndex + 1];
+                            totalR += pixels[pixelIndex + 2];
+                        }
+                    }
+
+                    int chunkPixels = Math.Min(pixelSize * pixelSize, (height - y) * (width - x));
+
+                    byte averageR = (byte)(totalR / chunkPixels);
+                    byte averageG = (byte)(totalG / chunkPixels);
+                    byte averageB = (byte)(totalB / chunkPixels);
+
+                    for (int offsetY = 0; offsetY < pixelSize && y + offsetY < height; offsetY++)
+                    {
+                        for (int offsetX = 0; offsetX < pixelSize && x + offsetX < width; offsetX++)
+                        {
+                            int pixelIndex = (y + offsetY) * stride + (x + offsetX) * 4;
+                            pixels[pixelIndex] = averageB;
+                            pixels[pixelIndex + 1] = averageG;
+                            pixels[pixelIndex + 2] = averageR;
+                        }
+                    }
+                }
+            }
+
+            writableBitmap.WritePixels(new Int32Rect(0, 0, width, height), pixels, stride, 0);
+
+            return writableBitmap;
         }
     }
 }
